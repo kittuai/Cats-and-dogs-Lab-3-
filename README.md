@@ -1,178 +1,160 @@
 
-# Cats vs Dogs – Advanced Image Classification with CNN and VGG16
+# 🐶🐱 Cats vs Dogs Classification Lab (Custom CNN vs. VGG16)
 
-This repository contains an in-depth analysis and implementation of binary image classification using a custom Convolutional Neural Network (CNN) and a fine-tuned VGG16 model, trained on a balanced subset of 5000 images (cats and dogs) from the original Kaggle dataset.
+## 📌 Overview
+This project explores binary image classification using deep learning models to distinguish between cats and dogs. It implements a custom-built Convolutional Neural Network (CNN) and compares its performance to a transfer learning approach using the pre-trained **VGG16** model.
 
-## 📁 Repository Structure
+The workflow includes two-phase fine-tuning of VGG16, robust evaluation metrics, and thorough error analysis. It is designed to be reproducible, automated, and insightful for academic and practical ML applications.
+
+---
+
+## 🗂 Repository Structure
 
 ```
 Cats-and-dogs-Lab-3/
-│
-├── Lab3_CNN_VGG16.ipynb         # Jupyter notebook with full pipeline
-├── requirements.txt             # All required packages and versions
-├── README.md                    # Project overview and detailed usage
-└── models/                      # Directory to store trained model weights
+├── lab3.ipynb     # 🔁 End-to-end notebook (Custom CNN + VGG16)
+├── requirements.txt         # ⚙️ Required dependencies for setup
+├── README.md                # 📘 Summary of project (you are here)
 ```
 
 ---
 
-## 🧠 Project Overview
+## 🎯 Objectives
 
-This project aims to compare the performance of:
-
-- A custom-built Convolutional Neural Network (CNN)
-- A fine-tuned transfer learning model using VGG16
-
-Each model is trained, validated, and tested using carefully preprocessed image data. Evaluation is conducted with metrics such as Accuracy, Loss, Precision, Recall, F1-Score, AUC, Confusion Matrix, PR & ROC Curves, and visual misclassification analysis.
-
----
-
-## 📊 Dataset Details
-
-- **Source:** Kaggle's Dogs vs Cats dataset
-- **Curated Subset Size:** 5000 images (train, val, test)
-- **Download Path (via KaggleHub):** `kittuai/krishna-catsdogs-dataset-lab3`
-- **Structure:**
-    ```
-    dataset/
-    ├── train/
-    │   ├── cat/
-    │   └── dog/
-    ├── validation/
-    └── test/
-    ```
-
-The notebook includes an auto-downloading script to fetch the dataset using `kagglehub`.
+- Build a baseline **Custom CNN** with essential layers and trainable parameters.
+- Use **Transfer Learning with VGG16** to improve performance and efficiency.
+- Introduce **two-phase fine-tuning** with selective layer unfreezing.
+- Apply **modern deep learning best practices**: callbacks, early stopping, checkpointing.
+- Evaluate both models using:
+  - Accuracy, Loss
+  - Confusion Matrix & Classification Report
+  - ROC Curve & AUC
+  - Precision-Recall Curve & Average Precision
+- Visualize **failed predictions** and **model disagreement**.
+- Provide clear comparison plots and statistical insights.
 
 ---
 
-## 📦 Model Checkpoints and Artifacts
+## 📁 Dataset Access
 
-### 🔹 Pretrained Models (VGG16 Checkpoints)
-- Phase 1: `best_vgg_phase1.h5`
-- Phase 2 (fine-tuned): `best_vgg_phase2.h5`
+### 📦 Kaggle Dataset (Preprocessed Subset)
+- Title: **Krishna CatsDogs Dataset - Lab 3**
+- URL: [Kaggle Dataset](https://www.kaggle.com/datasets/kittuai/krishna-catsdogs-dataset-lab3)
+- Description: 5000 manually curated and resized (150x150) images split into `train`, `validation`, and `test` sets.
+- Structure:
+  - `train/` – 3200 images
+  - `validation/` – 800 images
+  - `test/` – 1000 images (cats + 1000 dogs)
 
-### 🔹 Download from Kaggle
-All models and histories are available in the public Kaggle dataset:
-- URL: https://www.kaggle.com/datasets/kittuai/modelsh5
-- Programmatic Access:
+### 📥 Programmatic Access
 ```python
 import kagglehub
-kagglehub.dataset_download("kittuai/modelsh5")
+kagglehub.dataset_download("kittuai/krishna-catsdogs-dataset-lab3")
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## 🎓 Model Checkpoints & Histories
 
-### 1. Clone the Repo
+### 🧠 Trained VGG16 Model (HDF5 format)
+- URL: [https://www.kaggle.com/datasets/kittuai/modelsh5](https://www.kaggle.com/datasets/kittuai/modelsh5)
+- Includes: `best_vgg_phase2.h5`
+
+### 📊 Training History (Pickle format)
+- URL: [https://www.kaggle.com/datasets/kittuai/history](https://www.kaggle.com/datasets/kittuai/history)
+- Includes: `history_vgg_phase2.pkl`
+
+### Download via Code
+```python
+import kagglehub
+model_path = kagglehub.dataset_download("kittuai/modelsh5")
+history_path = kagglehub.dataset_download("kittuai/history")
+```
+
+---
+
+## ⚙️ Environment Setup
+
+### ✅ Requirements
+- Python 3.9+
+- TensorFlow < 2.11 (for GPU support compatibility)
+- See `requirements.txt` for all dependencies.
+
+### 🔧 Create Environment (Optional)
+```bash
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate (Windows)
+pip install -r requirements.txt
+```
+
+### 🧪 Test Installation
+```bash
+python -c "import tensorflow as tf; print(tf.__version__)"
+```
+
+---
+
+## ▶️ Running the Notebook
+
+1. **Clone** the repository:
 ```bash
 git clone https://github.com/kittuai/Cats-and-dogs-Lab-3-.git
 cd Cats-and-dogs-Lab-3-
 ```
 
-### 2. Create and Activate Environment
-```bash
-conda create -n catsdogs python=3.9 -y
-conda activate catsdogs
-```
-
-### 3. Install Requirements
+2. **Install** dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-> ⚠️ If using GPU, ensure TensorFlow < 2.11 is used and the compatible CUDA/cuDNN versions are installed.
-
----
-
-## 🚀 How to Run the Notebook
-
-Launch the notebook and run all cells sequentially.
-
-```bash
-jupyter notebook Lab3_CNN_VGG16.ipynb
-```
-
-The notebook will:
-- Auto-download the dataset and models if not found locally
-- Train the models (or load saved ones)
-- Generate evaluations, visualizations, and comparison tables
-
----
-
-## 📈 Evaluation Metrics
-
-Each model is evaluated using:
-- Accuracy and Loss (Test Set)
-- Confusion Matrix (Visual)
-- Precision, Recall, F1-score
-- AUC (ROC Curve)
-- Average Precision (PR Curve)
-- Misclassified Image Visualization
-- Comparison of Custom CNN vs. VGG16
-- Correct/Wrong prediction overlap analysis
-
----
-
-## 📌 Key Highlights
-
-- **Auto Resumable Pipelines:** Automatically downloads missing datasets and models
-- **Model Checkpointing:** Uses `ModelCheckpoint`, `EarlyStopping`, and custom `BestModelSaver`
-- **Transfer Learning Best Practices:** Phase-wise unfreezing with learning rate scheduling
-- **Visual Debugging:** All failed predictions shown with ground truth and model label
-- **Professional Code Structuring:** Markdown cells, plots, interpretations throughout
+3. **Open** the notebook and **run all cells**:
+- `lab3.ipynb` will:
+  - Download the dataset and models automatically.
+  - Train and evaluate models.
+  - Generate visual diagnostics and comparisons.
 
 ---
 
 ## 📊 Performance Summary
 
-| Model      | Accuracy | Loss   |
-|------------|----------|--------|
-| Custom CNN | 68.15%   | 0.6855 |
-| VGG16      | 94.60%   | 0.2648 |
+| Model      | Accuracy | Loss  | AUC   | Avg Precision |
+|------------|----------|-------|-------|----------------|
+| Custom CNN | ~0.68    | ~0.68 | ~0.73 | ~0.69           |
+| VGG16      | ~0.95    | ~0.26 | ~0.98 | ~0.96           |
 
-- VGG16 significantly outperforms the custom CNN in all evaluation metrics.
-- ROC AUC and PR AUC both exceed 0.94, indicating strong binary discrimination.
-- Misclassifications by the custom CNN were correctly predicted by VGG16 in 80%+ of cases.
+> VGG16 significantly outperforms the baseline CNN in all evaluation metrics.
 
 ---
 
-## 🔍 Misclassification Insights
-
-- The majority of errors by the custom CNN occurred due to overfitting and poor generalization.
-- VGG16, after selective unfreezing of block5 layers, correctly handled complex edge cases.
-- The visual heatmap and prediction overlays offer clear diagnostic value.
-
----
-
-## 📚 References
-
-- [Kaggle Dataset - Cats and Dogs](https://www.kaggle.com/datasets/kittuai/krishna-catsdogs-dataset-lab3)
-- [VGG16 Paper](https://arxiv.org/abs/1409.1556)
-- [TensorFlow Docs](https://www.tensorflow.org/api_docs)
+## 📈 Visual Insights
+- Confusion matrices highlight clear classification improvements.
+- ROC and PR curves show better true/false positive control with VGG16.
+- Misclassified and disputed examples offer **interpretability** of where models fail.
 
 ---
 
-## 🧪 Optional: Reproduce on Google Colab
+## 📌 Why This Project Stands Out
 
-You can open the notebook in Colab and it will download the dataset and models automatically:
-```python
-!pip install kagglehub
-import kagglehub
-kagglehub.dataset_download("kittuai/modelsh5")
-```
-
----
-
-## 📝 Final Notes
-
-This notebook and repository are designed with academic submission in mind:
-- Clear logic and outputs
-- Automatic fallback handling
-- Superior visuals and plots
-- Clean and professional layout
+- ✅ Two models with contrasting architectures for learning comparison
+- ✅ Transfer learning executed in **phased fine-tuning**, not just feature extraction
+- ✅ Use of **model checkpointing**, **early stopping**, **adaptive learning rate**
+- ✅ Rich **interpretation of visual errors**
+- ✅ All results, models, and data are **reproducible** and publicly accessible
+- ✅ Full automation: No manual downloads or configurations needed
 
 ---
 
+## 🔗 GitHub Repository
+- 📍 URL: [https://github.com/kittuai/Cats-and-dogs-Lab-3-](https://github.com/kittuai/Cats-and-dogs-Lab-3-)
 
+---
+
+## 📬 Contact
+
+For any academic queries, collaboration, or feedback:
+- Raise an issue on GitHub
+- Connect via your preferred academic channel
+
+---
+
+© Krishna Reddy | Lab 3 – Deep Learning (Cats vs Dogs)
